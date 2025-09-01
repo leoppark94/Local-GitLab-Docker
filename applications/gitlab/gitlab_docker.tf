@@ -3,34 +3,68 @@ resource "docker_image" "gitlab" {
   name = var.gitlab_docker_registry_image
 }
 
+# When default need resource
+resource "docker_network" "this" {
+  count  = var.network_name == "gitlab" ? 1 : 0
+  name   = var.network_name
+  driver = "bridge"
+}
+
+locals {
+  gitlab_ports = [
+    {
+      internal = 80
+      external = var.http_port
+      protocol = "tcp"
+    },
+    {
+      internal = 443
+      external = var.https_port
+      protocol = "tcp"
+    }
+  ]
+}
+
 # Create a container
 resource "docker_container" "gitlab" {
-  image    = docker_image.gitlab.image_id
-  name     = var.gitlab_container_name
-  hostname = "gitlab.localdomain.com"
+  image = docker_image.gitlab.image_id
+  name  = var.gitlab_container_name
+
   env = [
-    "external_url 'https://gitlab.localdomain.com'"
+    "GITLAB_OMNIBUS_CONFIG=external_url 'http://gitlab.local.com'"
   ]
 
-  # HTTP
-  ports {
-    internal = 80
-    external = var.http_port
-    protocol = "tcp"
+  networks_advanced {
+    name = var.network_name
   }
 
-  # HTTPS
-  ports {
-    internal = 443
-    external = var.https_port
-    protocol = "tcp"
+  labels {
+    label = "traefik.enable"
+    value = "true"
   }
 
-  # SSH
-  ports {
-    internal = 22
-    external = var.ssh_port
-    protocol = "tcp"
+  labels {
+    label = "traefik.http.routers.gitlab.rule"
+    value = "Host(`gitlab.local.com`)"
+  }
+
+  labels {
+    label = "traefik.http.routers.gitlab.entrypoints"
+    value = "web"
+  }
+
+  labels {
+    label = "traefik.http.services.gitlab.loadbalancer.server.port"
+    value = "80"
+  }
+
+  dynamic "ports" {
+    for_each = var.use_traefik ? [] : local.gitlab_ports
+    content {
+      internal = ports.value.internal
+      external = ports.value.external
+      protocol = ports.value.protocol
+    }
   }
 
   # Stores the GitLab configuration files.

@@ -1,5 +1,5 @@
 variable "gitlab_docker_registry_image" {
-  description = "The image ID or Image to use for gitlab image"
+  description = "Container image to run gitlab"
   type        = string
   default     = "gitlab/gitlab-ce:nightly"
 }
@@ -28,8 +28,21 @@ variable "ssh_port" {
   default     = 22
 }
 
+variable "use_traefik" {
+  description = "Use external loadbalancer(traefik)"
+  type        = bool
+  default     = false
+}
+
 variable "gitlab_home_path" {
   description = "GitLab Home Path"
-  type = string
-  default = "./gitlab_home"
+  type        = string
+  default     = "./gitlab_home"
 }
+
+variable "network_name" {
+  description = "Docker Network Name"
+  type        = string
+  default     = "gitlab"
+}
+
