@@ -46,3 +46,8 @@ variable "network_name" {
   default     = "gitlab"
 }
 
+variable "restart_container" {
+  description = "The restart policy for the container. Must be one of 'no', 'on-failure', 'always', 'unless-stopped'."
+  type        = string
+  default     = "unless-stopped"
+}

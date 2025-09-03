@@ -1,0 +1,6 @@
+lorry:
+  type: git
+  url: https://gitlab.com/CodethinkLabs/lorry/lorry2.git
+  ref_patterns:
+    - 'ma*'
+    - 'refs/tags/*'

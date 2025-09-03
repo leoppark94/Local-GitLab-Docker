@@ -26,10 +26,11 @@ locals {
 
 # Create a container
 resource "docker_container" "traefik" {
-  image = docker_image.traefik.image_id
-  name  = var.traefik_container_name
-
-  command = local.traefik_cmd
+  image      = docker_image.traefik.image_id
+  name       = var.traefik_container_name
+  privileged = false
+  restart = var.restart_container
+  command    = local.traefik_cmd
 
   networks_advanced {
     name = var.network_name

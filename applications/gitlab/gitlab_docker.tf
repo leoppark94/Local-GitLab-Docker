@@ -27,8 +27,10 @@ locals {
 
 # Create a container
 resource "docker_container" "gitlab" {
-  image = docker_image.gitlab.image_id
-  name  = var.gitlab_container_name
+  image      = docker_image.gitlab.image_id
+  name       = var.gitlab_container_name
+  restart = var.restart_container
+  privileged = false
 
   env = [
     "GITLAB_OMNIBUS_CONFIG=external_url 'http://gitlab.local.com'"
