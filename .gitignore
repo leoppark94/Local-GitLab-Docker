@@ -38,3 +38,7 @@ terraform.rc
 
 # GitLab Home Path
 gitlab_home
+
+# env files
+.env
+lorry.token
