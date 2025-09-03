@@ -11,6 +11,10 @@ level = "INFO"
 kind = "local"
 path = "./config_source"
 
+[[config-source]]
+kind = "local"
+path = "./config_source_2"
+
 [downstream]
 kind = "gitlab"
 username = "oauth2"

@@ -50,6 +50,13 @@ locals {
   }
 }
 
+locals {
+  lorry_files_directory_2 = {
+    host_path      = abspath(var.config_source_path_2)
+    container_path = "/config_source_2"
+  }
+}
+
 resource "docker_container" "lorry" {
   image      = docker_image.lorry.image_id
   name       = var.lorry_container_name
@@ -87,10 +94,18 @@ resource "docker_container" "lorry" {
     container_path = "/db"
   }
 
-
-
+  # Mirror 1
   dynamic "volumes" {
     for_each = var.config_source_path == "" ? [local.default_lorry_file, local.default_lorry_controller_conf]:[local.lorry_files_directory]
+    content {
+      host_path      = volumes.value.host_path
+      container_path = volumes.value.container_path
+    }
+  }
+
+  # Mirror 2
+  dynamic "volumes" {
+    for_each = var.config_source_path == "" ? []:[local.lorry_files_directory_2]
     content {
       host_path      = volumes.value.host_path
       container_path = volumes.value.container_path

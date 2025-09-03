@@ -55,3 +55,9 @@ variable "config_source_path" {
   type        = string
   default     = ""
 }
+
+variable "config_source_path_2" {
+  description = "Optional config folder path to mount to /config_source"
+  type        = string
+  default     = ""
+}

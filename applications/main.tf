@@ -28,4 +28,6 @@ module "lorry" {
 
   lorry_home_path  = "/home/leopark/Projects/Personal/Local-GitLab-Docker/lorry_home"
   lorry_token_path = "lorry.token"
+  config_source_path = "/home/leopark/Projects/Personal/Local-GitLab-Docker/lorry_mirror_1"
+  config_source_path_2 = "/home/leopark/Projects/Personal/Local-GitLab-Docker/lorry_mirror_2"
 }
